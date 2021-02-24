@@ -1,0 +1,9 @@
+* {
+    background: #fff
+}
+.visible {
+    visibility: visible;
+}
+.invisible {
+    display: none;
+}

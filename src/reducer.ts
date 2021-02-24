@@ -1,17 +1,18 @@
 import { combineReducers, createAction, createReducer } from '@reduxjs/toolkit'
-import { Item, StateType } from './types'
-import { DSVRowString } from 'd3'
+import { StateType } from './types';
 
 const initialState: StateType = {
-    list: [],
-    errorMessage: ''
+    name: 'cost',
+    children: []
 };
 
-export const fetchCSVSuccess = createAction<DSVRowString[]>('fetchCSVSuccess');
+export const fetchJSONSuccess = createAction<any>('fetchJSONSuccess');
 
 const reducer = createReducer(initialState, {
-    [fetchCSVSuccess.type]: (state, action) => {
-        state.list = action.payload;
+    [fetchJSONSuccess.type]: (state, action) => {
+        state.children = action.payload.children;  
+        // Order children by year
+        state.children.sort((a, b) => (a.name > b.name) ? 1:((b.name > a.name)? -1:0))     
     }
 })
 

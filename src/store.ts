@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
-import reducer, { fetchCSVSuccess } from './reducer'
+import reducer from './reducer'
 import middleware from './middleware'
-import { fetchCSV } from './action'
+import { fetchJSON } from './action'
 
 const store = configureStore({
     reducer: reducer,
     middleware: [middleware],
 })
-store.dispatch(fetchCSV());
+store.dispatch(fetchJSON());
 
 export default store;

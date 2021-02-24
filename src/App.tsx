@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux'
-import DrawChart from './DrawChart';
 import store from './store'
+import './app.css'
+import Layout from './Layout';
 
 const App = () => {
   return (
     <Provider store={store}>
-      <DrawChart />
+      <Layout />
     </Provider>
   );
 }

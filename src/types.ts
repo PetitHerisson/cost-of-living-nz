@@ -1,20 +1,34 @@
-export interface Item {
-    hlpi_name: string;
-    year: string;
-    hlpi: string;
-    nzhec: string;
-    nzhec_name: string;
-    nzhec_short: string;
-    level: string;
-    nzhec1: string;
-    nzhec1_name: string;
-    nzhec1_short: string;
-    weight: string;
-    exp_pw: string;
-    eqv_exp_pw: string;
+export interface d3Node {
+    id: string,
+    group: number
+}
+export interface d3Link {
+    source: string,
+    target: string,
+    value: number
+}
+export interface Graph {
+    nodes: d3Node[],
+    links: d3Link[]
+}
+export interface StateType {
+    name: string;
+    children: YearType[];
+}
+export interface YearType {
+    name: string;
+    children: PeopleType[];
+}
+export interface PeopleType {
+    name: string;
+    children: GroupType[];
+}
+export interface GroupType {
+    name: string;
+    children: SubgroupType[];
+}
+export interface SubgroupType {
+    name: string;
+    value: string
 }
 
-export interface StateType{
-    list: Item[];
-    errorMessage: string;
-}

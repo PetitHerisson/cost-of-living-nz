@@ -1,3 +1,3 @@
 import { createAction } from '@reduxjs/toolkit'
 
-export const fetchCSV = createAction('fetchCSV'); 
+export const fetchJSON = createAction('fetchCSV'); 
