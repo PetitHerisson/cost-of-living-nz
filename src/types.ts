@@ -1,16 +1,3 @@
-export interface d3Node {
-    id: string,
-    group: number
-}
-export interface d3Link {
-    source: string,
-    target: string,
-    value: number
-}
-export interface Graph {
-    nodes: d3Node[],
-    links: d3Link[]
-}
 export interface StateType {
     name: string;
     children: YearType[];
@@ -32,3 +19,25 @@ export interface SubgroupType {
     value: string
 }
 
+export interface BarChatProps{
+    data: object;
+}
+
+export interface DataFilterProps{
+    filterData: any;
+}
+
+export interface AutocompleteProps {
+    onChange: any;
+    onKeyDown: any;
+    text: string;
+    suggestionsList: any
+}
+export interface TreeCheckboxProps {
+    groups: GroupType[];
+    setData: any
+}
+export interface OptionType {
+    value: string;
+    label: string;
+}
