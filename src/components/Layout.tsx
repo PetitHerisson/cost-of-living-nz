@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux';
 import styled from 'styled-components'
+import { RootState } from '../reducer';
+import { ExpenditureType } from '../types';
 import BarChart from './BarChart';
 import DataFilter from './DataFilter';
 import Introduction from './Introduction';
@@ -7,15 +10,10 @@ import Introduction from './Introduction';
 const Container = styled.div`
     margin: 1em;
     display: grid;
-    grid-template-rows: 200px 75%;
+    grid-template-rows: 250px 75%;
     grid-template-columns: 300px 60% 150px;
     grid-template-areas: "header header header" "sidebar main empty";
     justify-content: center;
-    @media (max-width: 1000px) {
-        grid-template-rows: 300px 400px 75%;
-        grid-template-columns: 100%;
-        grid-template-areas: "header" "sidebar" "main";
-    }
 `;
 const Header = styled.div`
     grid-area: header;
@@ -32,7 +30,8 @@ const Main = styled.div`
     grid-area: main;
 `;
 const Layout = () => {
-    const [data, filterData] = useState({})
+    const [data, filterData] = useState([])
+
     return (
         <Container>
             <Header>

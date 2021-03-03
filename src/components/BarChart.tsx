@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import { HierarchyNode } from 'd3';
 import React from 'react'
-import { BarChatProps, StateType } from '../types';
+import { BarChatProps, ExpenditureType } from '../types';
 
 const BarChart = (props: BarChatProps) => {
     const { data } = props
@@ -12,7 +12,7 @@ const BarChart = (props: BarChatProps) => {
     const barPadding = 3 / barStep
     const color = d3.scaleOrdinal([true, false], ["#FE6A6A", "#aaa"])
     let max = 1;
-    const root = d3.hierarchy(data) as HierarchyNode<StateType>
+    const root = d3.hierarchy(data) as HierarchyNode<ExpenditureType>
     root.sum((d: any) => d.value)
         .sort((a: any, b: any) => b.value - a.value)
         .eachAfter((d: any) => d.index = d.parent ? d.parent.index = d.parent.index + 1 || 0 : 0)
@@ -204,6 +204,7 @@ const BarChart = (props: BarChatProps) => {
 
         return g;
     }
+    // useEffect
     const svg = d3.select("#canvas")
     svg.selectAll("*").remove()
         .append("svg")

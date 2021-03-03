@@ -1,4 +1,4 @@
-export interface StateType {
+export interface ExpenditureType {
     name: string;
     children: YearType[];
 }
@@ -18,26 +18,30 @@ export interface SubgroupType {
     name: string;
     value: string
 }
-
-export interface BarChatProps{
+export interface BarChatProps {
     data: object;
 }
-
-export interface DataFilterProps{
+export interface DataFilterProps {
     filterData: any;
 }
-
 export interface AutocompleteProps {
-    onChange: any;
-    onKeyDown: any;
-    text: string;
-    suggestionsList: any
+    suggestions: string[];
+    setData: any;
 }
 export interface TreeCheckboxProps {
-    groups: GroupType[];
-    setData: any
+    setData: any;
+    initialState: GroupStateType[];
 }
 export interface OptionType {
     value: string;
     label: string;
+}
+export interface GroupStateType {
+    name: string;
+    checked: boolean;
+    children: SubGroupType[]
+}
+export interface SubGroupType {
+    name: string;
+    checked: boolean;
 }

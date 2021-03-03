@@ -1,7 +1,9 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useContext, useEffect, useState } from 'react'
 import styled from 'styled-components';
 import '../app.css'
-import { TreeCheckboxProps } from '../types';
+import { GroupStateType, GroupType, SubgroupType, TreeCheckboxProps } from '../types';
+import DataContext from '../DataContext'
+
 
 const Ul = styled.ul`
     list-style: none;
@@ -15,14 +17,44 @@ const Button = styled.span`
     text-align: center;
     outline: none;
     border: 2px solid #42C6C7;
+    cursor: pointer;
 `;
 const TreeCheckbox = (props: TreeCheckboxProps) => {
-
-    const { groups, setData } = props;
+    const data = useContext(DataContext);
+    const { initialState, setData } = props;
     const nodeArray = (selector: string, parent = document as unknown as Element) => [].slice.call(parent.querySelectorAll<HTMLInputElement>(selector)) as HTMLInputElement[];
-
+    
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         let check = e.target as HTMLInputElement;
+
+        // Set local state
+        initialState.forEach(i => {
+            if (i.name === check.name) {
+                i.checked = check.checked
+                // Check all children if parent is checked
+                i.children.forEach(j => {
+                    j.checked = check.checked
+                });
+            }
+            i.children.forEach(j => {
+                if (j.name === check.name) {
+                    j.checked = check.checked
+                    // Check parent if any of the children is checked
+                    if (check.checked) {
+                        i.checked = true;
+                    }
+                }
+            });
+        });
+
+        // Set filtered data
+        initialState.forEach(g => {
+            let index = data.selectedGroups.indexOf(g.name)
+            if (g.checked === true && index === -1) {
+                data.selectedGroups.push(g.name)
+                setData(data)
+            }
+        });
 
         //	check/unchek children (includes check itself)
         const children = nodeArray('input', check.parentNode as Element);
@@ -59,7 +91,6 @@ const TreeCheckbox = (props: TreeCheckboxProps) => {
             }
         }
     }
-
     const toggle = (id: string) => {
         const subgroup = document.getElementById(id) as Element;
         const button = document.getElementById(id + 1) as Element;
@@ -72,9 +103,10 @@ const TreeCheckbox = (props: TreeCheckboxProps) => {
             button.innerHTML = '-';
         }
     }
+
     return (
         <Ul>
-            {groups.map((i, index: number) => (
+            {initialState.map((i, index: number) => (
                 <li key={index}>
                     <Button onClick={() => toggle(i.name)} id={i.name + 1}>+</Button>
                     <input type="checkbox" name={i.name} onChange={onChange} />
