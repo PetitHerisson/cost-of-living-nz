@@ -1,9 +1,7 @@
-import React, { ChangeEvent, useContext, useEffect, useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import styled from 'styled-components';
 import '../app.css'
-import { GroupStateType, GroupType, SubgroupType, TreeCheckboxProps } from '../types';
-import DataContext from '../DataContext'
-
+import { Item, GroupType, SubgroupType, TreeCheckboxProps } from '../types';
 
 const Ul = styled.ul`
     list-style: none;
@@ -19,46 +17,68 @@ const Button = styled.span`
     border: 2px solid #42C6C7;
     cursor: pointer;
 `;
+
 const TreeCheckbox = (props: TreeCheckboxProps) => {
-    const data = useContext(DataContext);
-    const { initialState, setData } = props;
+    const { groups, selectGroups } = props;
+
+    let groupCheckbox: Item[] = [];
+    groups.forEach(g => {
+        groupCheckbox.push({ name: g.name, children: [], checked: false });
+        g.children.forEach(s => {
+            groupCheckbox.forEach(i => {
+                if (i.name === g.name) {
+                    i.children.push({ name: s.name, children: [], checked: false, parent: g.name })
+                }
+            })
+        })
+    });
+    const itemMap = new Map();
+    const flattenObj = (item: Item) => {
+        const { children } = item;
+        itemMap.set(item.name, item);
+        children.forEach(flattenObj);
+    }
+    flattenObj({ name: 'groups', children: groupCheckbox, checked: false });
+    itemMap.delete('groups');
+    const [items, setItems] = useState(itemMap);
+
     const nodeArray = (selector: string, parent = document as unknown as Element) => [].slice.call(parent.querySelectorAll<HTMLInputElement>(selector)) as HTMLInputElement[];
-    
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         let check = e.target as HTMLInputElement;
-
-        // Set local state
-        initialState.forEach(i => {
-            if (i.name === check.name) {
-                i.checked = check.checked
-                // Check all children if parent is checked
-                i.children.forEach(j => {
-                    j.checked = check.checked
-                });
-            }
-            i.children.forEach(j => {
-                if (j.name === check.name) {
-                    j.checked = check.checked
-                    // Check parent if any of the children is checked
-                    if (check.checked) {
-                        i.checked = true;
-                    }
-                }
-            });
-        });
-
-        // Set filtered data
-        initialState.forEach(g => {
-            let index = data.selectedGroups.indexOf(g.name)
-            if (g.checked === true && index === -1) {
-                data.selectedGroups.push(g.name)
-                setData(data)
-            }
-        });
-
+        const isChecked = check.checked;
         //	check/unchek children (includes check itself)
         const children = nodeArray('input', check.parentNode as Element);
         children.forEach(child => child.checked = check.checked);
+        const item = items.get(check.name)
+        setItems(prevItems => {
+            prevItems.set(item.name, { ...item, checked: isChecked });
+            item.children.forEach((child: Item) => {
+                prevItems.set(child.name, { ...child, checked: isChecked })
+            })
+            return prevItems;
+        })
+
+        // Get selected groups and subgroups
+        let selectedGroups = [] as GroupType[];
+        groups.forEach(g => {
+            if (items.get(g.name).checked === true) {
+                selectedGroups.push({ name: g.name, children: g.children });
+            } else {
+                let subgroups = [] as SubgroupType[];
+                g.children.forEach(s => {
+                    if (items.get(s.name).checked === true) {
+                        subgroups.push({ name: s.name, value: 0 })
+                    }
+                });
+
+                if (subgroups.length !== 0) {
+                    selectedGroups.push({ name: g.name, children: subgroups });
+                }
+            }
+        });
+
+        // Set selectedGroups in data
+        selectGroups(selectedGroups);
 
         //	traverse up from target check
         while (check) {
@@ -106,7 +126,7 @@ const TreeCheckbox = (props: TreeCheckboxProps) => {
 
     return (
         <Ul>
-            {initialState.map((i, index: number) => (
+            {groupCheckbox.map((i, index: number) => (
                 <li key={index}>
                     <Button onClick={() => toggle(i.name)} id={i.name + 1}>+</Button>
                     <input type="checkbox" name={i.name} onChange={onChange} />
