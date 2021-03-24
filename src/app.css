@@ -1,9 +1,14 @@
 * {
-    background: #fff
+    background: #212529;
+    color: #ccc
 }
 .visible {
     visibility: visible;
 }
-.invisible {
+.hidden {
     display: none;
+}
+
+li {
+    list-style: none;
 }
