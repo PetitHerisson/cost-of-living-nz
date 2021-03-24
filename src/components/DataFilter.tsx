@@ -32,28 +32,38 @@ const DataFilter = (props: DataFilterProps) => {
         selectedPeople: [] as OptionType[],
         selectedGroups: [] as GroupType[]
     })
-
+    const [disabled, setDisabled] = useState(false);
     useEffect(() => {
         filterData(dataGenerator(data));
     }, [data])
-
+    const loadAnimation = () => {
+        setTimeout(() => {
+            setDisabled(false);  
+        }, 1200)
+    }
     const selectYears = (selectedYears: any) => {
+        setDisabled(true)
         setData({
             ...data,
             selectedYears
-        })
+        });
+        loadAnimation()
     }
     const selectGroups = (selectedGroups: GroupType[]) => {
+        setDisabled(true)
         setData({
             ...data,
             selectedGroups
         })
+        loadAnimation()
     }
     const selectPeople = (selectedPeople: any) => {
+        setDisabled(true)
         setData({
             ...data,
             selectedPeople
         })
+        loadAnimation()
     }
 
     return (
@@ -64,6 +74,7 @@ const DataFilter = (props: DataFilterProps) => {
                 components={makeAnimated()}
                 isMulti
                 options={options}
+                isDisabled={disabled}
                 styles={styles}
                 onChange={selectYears}
                 value={data.selectedYears}
@@ -81,6 +92,7 @@ const DataFilter = (props: DataFilterProps) => {
                 components={makeAnimated()}
                 isMulti
                 options={peopleOptions}
+                isDisabled={disabled}
                 styles={styles}
                 onChange={selectPeople}
                 value={data.selectedPeople}
@@ -93,7 +105,7 @@ const DataFilter = (props: DataFilterProps) => {
                 })}
             /><br />
             <Label>Expenditure Group: </Label>
-            <TreeCheckbox groups={groups} selectGroups={selectGroups} />
+            <TreeCheckbox groups={groups} selectGroups={selectGroups} disabled={disabled}/>
         </>
     )
 }

@@ -51,6 +51,7 @@ export interface AutocompleteProps {
 export interface TreeCheckboxProps {
     selectGroups: any;
     groups: GroupType[];
+    disabled: boolean;
 }
 
 export interface OptionType {

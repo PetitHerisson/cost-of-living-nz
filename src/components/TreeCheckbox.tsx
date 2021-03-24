@@ -19,7 +19,7 @@ const Button = styled.span`
 `;
 
 const TreeCheckbox = (props: TreeCheckboxProps) => {
-    const { groups, selectGroups } = props;
+    const { groups, selectGroups, disabled } = props;
 
     let groupCheckbox: Item[] = [];
     groups.forEach(g => {
@@ -129,12 +129,12 @@ const TreeCheckbox = (props: TreeCheckboxProps) => {
             {groupCheckbox.map((i, index: number) => (
                 <li key={index}>
                     <Button onClick={() => toggle(i.name)} id={i.name + 1}>+</Button>
-                    <input type="checkbox" name={i.name} onChange={onChange} />
+                    <input type="checkbox" name={i.name} onChange={onChange} disabled={disabled}/>
                     <label htmlFor={i.name}>{i.name}</label>
                     <Ul id={i.name} className='hidden'>
                         {i.children.map((j, index: number) => (
                             <li key={index}>
-                                <input type="checkbox" name={j.name} id={j.name} onChange={onChange} />
+                                <input type="checkbox" name={j.name} id={j.name} onChange={onChange} disabled={disabled} />
                                 <label htmlFor={j.name}>{j.name}</label>
                             </li>
                         ))}
