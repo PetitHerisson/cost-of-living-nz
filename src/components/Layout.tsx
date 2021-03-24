@@ -1,18 +1,18 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux';
 import styled from 'styled-components'
-import { RootState } from '../reducer';
-import { ExpenditureType } from '../types';
 import BarChart from './BarChart';
 import DataFilter from './DataFilter';
 import Introduction from './Introduction';
+import { JSONProvider } from '../JSONContext'
+import JSON from '../cost-of-living';
+
 
 const Container = styled.div`
     margin: 1em;
     display: grid;
     grid-template-rows: 250px 75%;
-    grid-template-columns: 300px 60% 150px;
-    grid-template-areas: "header header header" "sidebar main empty";
+    grid-template-columns: 300px 70%;
+    grid-template-areas: "header header" "sidebar main";
     justify-content: center;
 `;
 const Header = styled.div`
@@ -33,18 +33,20 @@ const Layout = () => {
     const [data, filterData] = useState([])
 
     return (
-        <Container>
-            <Header>
-                <h2>Household Living-costs Price Indexes</h2>
-                <Introduction />
-            </Header>
-            <Sidebar>
-                <DataFilter filterData={filterData} />
-            </Sidebar>
-            <Main>
-                <BarChart data={data} />
-            </Main>
-        </Container>
+        <JSONProvider value={JSON}>
+            <Container>
+                <Header>
+                    <h2>Household Living-costs Price Indexes</h2>
+                    <Introduction />
+                </Header>
+                <Sidebar>
+                    <DataFilter filterData={filterData} />
+                </Sidebar>
+                <Main>
+                    <BarChart data={data} />
+                </Main>
+            </Container>
+        </JSONProvider>
     )
 }
 

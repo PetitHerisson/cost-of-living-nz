@@ -1,11 +1,11 @@
 import * as d3 from 'd3';
 import { HierarchyNode } from 'd3';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BarChatProps, ExpenditureType } from '../types';
 
 const BarChart = (props: BarChatProps) => {
     const { data } = props
- 
+
     const margin = ({ top: 30, right: 30, bottom: 0, left: 160 })
     const duration = 750
     const barStep = 27
@@ -205,31 +205,34 @@ const BarChart = (props: BarChatProps) => {
         return g;
     }
     // useEffect
-    const svg = d3.select("#canvas")
-    svg.selectAll("*").remove()
-        .append("svg")
-        .attr("width", width)
-        .attr("height", height);
-    const value = root.value as number
-    x.domain([0, value])
-    svg.append("rect")
-        .attr("class", "background")
-        .attr("fill", "none")
-        .attr("pointer-events", "all")
-        .attr("width", width)
-        .attr("height", height)
-        .attr("cursor", "pointer")
-        .on("click", (event, d) => up(svg, d));
+    useEffect(() => {
+        const svg = d3.select("#canvas")
+        svg.selectAll("*").remove()
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+        const value = root.value as number
+        x.domain([0, value])
+        svg.append("rect")
+            .attr("class", "background")
+            .attr("fill", "none")
+            .attr("pointer-events", "all")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("cursor", "pointer")
+            .on("click", (event, d) => up(svg, d));
 
-    svg.append("g")
-        .call(xAxis);
+        svg.append("g")
+            .call(xAxis);
 
-    svg.append("g")
-        .call(yAxis);
-    down(svg, root);
+        svg.append("g")
+            .call(yAxis);
+        down(svg, root);
+    }, [data])
+
     return (
-        <div><svg id="canvas" style={{width: '800px', height: '500px'}}></svg></div>
-        )
+        <div><svg id="canvas" style={{ width: '800px', height: '500px' }}></svg></div>
+    )
 }
 
 export default BarChart
