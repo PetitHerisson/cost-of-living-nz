@@ -1,4 +1,3 @@
-# Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 ![alt text](https://github.com/PetitHerisson/cost-of-living-nz/blob/master/Screen%20Shot.png)
