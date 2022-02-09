@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/app.css"],"names":[],"mappings":"AAAA,EACI,kBAAmB,CACnB,UACJ,CACA,SACI,kBACJ,CACA,QACI,YACJ,CAEA,GACI,eACJ","file":"main.f2b1896c.chunk.css","sourcesContent":["* {\n    background: #212529;\n    color: #ccc\n}\n.visible {\n    visibility: visible;\n}\n.hidden {\n    display: none;\n}\n\nli {\n    list-style: none;\n}"]}
